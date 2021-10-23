@@ -1,0 +1,8 @@
+{
+"locale": "en",
+"global":{
+    "home" : "Home",
+    "settings"  : "Settings",
+    "favs"  : "Favorites"
+}    
+}
