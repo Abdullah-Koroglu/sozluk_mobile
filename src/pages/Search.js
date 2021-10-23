@@ -1,5 +1,5 @@
 import React, { useState , useEffect } from 'react';
-import {TouchableOpacity, StyleSheet, Text, View , TextInput } from 'react-native';
+import {TouchableOpacity, StyleSheet, Text, View , TextInput, SafeAreaView } from 'react-native';
 
 import db from "../../assets/yalandb";
 
@@ -89,7 +89,7 @@ const WordSearchPage = () => {
 
 
     return (
-        <View className="ws-page-wrapper" >
+        <SafeAreaView style={styles.container} >
             <TextInput style={[{  textAlign: checkArabic(kelime) === "tr" ? "left" : "right"} , styles.textInput] }
                 value={kelime}
                 onChangeText={(val) => {setKelime(val)
@@ -103,17 +103,19 @@ const WordSearchPage = () => {
             </TouchableOpacity> */}
                 </View>
             {renderResult()}
-            {/* <Text style={{color:"blue"}}>{kelime}</Text> */}
-        </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
       flex: 1,
+      height:"100%",
+      width:"100%",
       backgroundColor: '#fff',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'flex-start',
+      
     },row:{
         // flex: 1,
         display:"flex",
@@ -128,7 +130,8 @@ const styles = StyleSheet.create({
         height:40,
         padding:10,
         borderRadius:10,
-        width:450,
+        width:"90%",
+        // margin:30
     },
     button:{
         width:50,
