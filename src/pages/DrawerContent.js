@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { ImageBackground , Image, StyleSheet, TouchableOpacity, Text, View, SafeAreaView } from 'react-native';
 import { Context as SettingsContext } from '../context/SettingsContext'
+import { useFonts } from 'expo-font';
 import {
   DrawerContentScrollView,
   DrawerItem
@@ -14,6 +15,13 @@ const locales = {
 };
 export default function App(props) {
   const { state: { locale } } = useContext(SettingsContext)
+  const [loaded] = useFonts({
+    Montserrat: require('../../assets/fonts/Amiri-Regular.ttf'),
+  });
+  
+  if (!loaded) {
+    return null;
+  }
   return (
     <View style={styles.container}>
       <ImageBackground  source={require("../../assets/images/drawerbg.jpg")} resizeMode="cover" style={styles.image}>
@@ -21,7 +29,7 @@ export default function App(props) {
         <View style={styles.section}>
           <View style={styles.header}>
             <Image source={require("../../assets/favicon.png")}></Image>
-            <Text style={styles.title}>Bismikallah</Text>
+            <Text style={[styles.title , { fontFamily : "Montserrat"}]}>قاموس</Text>
           </View>
         </View>
         <View style={styles.drawerContent}>
@@ -33,7 +41,7 @@ export default function App(props) {
                   color={"white"}
                   size={"25"}
                 />
-                <Text style={styles.pagesText}>
+                <Text style={[styles.pagesText , { fontFamily : "Montserrat"}]}>
                   {locales[locale].global.home}
                 </Text>
               </View>
@@ -45,7 +53,7 @@ export default function App(props) {
                   color={"white"}
                   size={"25"}
                 />
-                <Text style={styles.pagesText}>
+                <Text style={[styles.pagesText , { fontFamily : "Montserrat"}]}>
                   {locales[locale].global.favs}
                 </Text>
               </View>
@@ -58,7 +66,7 @@ export default function App(props) {
                   color={"white"}
                   size={"25"}
                 />
-                <Text style={styles.pagesText}>
+                <Text style={[styles.pagesText , { fontFamily : "Montserrat"}]}>
                   {locales[locale].global.settings}
                 </Text>
               </View>
@@ -66,20 +74,10 @@ export default function App(props) {
           </View>
         </View>
       </DrawerContentScrollView>
+      <View style={styles.bottomDrawerSection}>
+        <Text style={[styles.pagesText , {fontSize:49 , fontFamily : "Montserrat"}]}> اسم التطبيق </Text>
+    </View>
       </ImageBackground>
-      {/* <View style={styles.bottomDrawerSection}>
-        <DrawerItem 
-            // icon={({color, size}) => (
-            //     <Icon 
-            //     name="exit-to-app" 
-            //     color={color}
-            //     size={size}
-            //     />
-            // )}
-            label="Sign Out"
-            onPress={() => {signOut()}}
-        />
-    </View> */}
     </View>
   );
 }
@@ -90,17 +88,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginHorizontal:20,
-    marginVertical:4,
+    marginVertical:0,
     justifyContent: "flex-start"
   },
   pagesText:{
     paddingHorizontal:15,
+    fontSize:20,
     color:"white"
   },
   title: {
     fontSize: 16,
     color: "white",
-    marginTop: 3,
+    marginBottom: 3,
+    fontSize:28,
+    paddingHorizontal : 37,
     fontWeight: "normal",
   },
   caption: {
@@ -126,8 +127,8 @@ const styles = StyleSheet.create({
   },
   bottomDrawerSection: {
     marginBottom: 15,
-    borderTopColor: '#f4f4f4',
-    borderTopWidth: 1
+    justifyContent:"center",
+    alignItems:"center"
   },
   preference: {
     flexDirection: 'row',
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
   },
   container:{
     flex : 1,
-    backgroundColor:"green"
+    backgroundColor:"green",
   },
   image:{
     flex:1,

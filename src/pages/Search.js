@@ -1,7 +1,7 @@
 import React, { useState , useEffect } from 'react';
 import {TouchableOpacity, StyleSheet, Text, View , TextInput, SafeAreaView } from 'react-native';
 
-import db from "../../assets/yalandb";
+import db from "../../assets/son.json";
 
 const WordSearchPage = () => {
     const [kelime, setKelime] = useState("")
@@ -10,12 +10,14 @@ const WordSearchPage = () => {
 
 
     const getWordFromInput = (input) => {
+        debugger
         var isArabic = /[\u0600-\u06FF\u0750-\u077F]/;
+        let response = []
         if (isArabic.test(input) === true) {
-            let response = db.filter(i=> i.KelimeAr == input );
+            response = db.filter(i=> i.ar == input );
             // console.log(response);
             if (response.length == 0) {
-                    setTranslation("")
+                    setTranslation([])
                     setNotFound("ar"); 
             }
             else {
@@ -23,9 +25,9 @@ const WordSearchPage = () => {
                 setTranslation(response)
             }
         } else {
-            let response = db.filter(i=> i.KelimeTr == input );
+            response = db.filter(i=> i.tr == input.toLocaleLowerCase('tr-TR') );
             if (response.length == 0) {
-                    setTranslation("")
+                    setTranslation([])
                     setNotFound("tr"); 
             }
             else {
@@ -64,13 +66,28 @@ const WordSearchPage = () => {
         return text;
     }
 
+    function debounce(func, wait, immediate) {
+        var timeout;
+        return function() {
+            var context = this, args = arguments;
+            var later = function() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            var callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
+    };
+
     const renderResult = () => {
         return (
             <View>
                 {
                     translation.length > 0 &&
                     translation.map((i, index) => {
-                        return (<Text key={i.KelimeID}> {i.KelimeHr} - {i.KelimeTr} - {i.AnlamTr}</Text>)
+                        return (<Text key={index}> {i.ar} - {i.tr}</Text>)
                     })
                     }
                 {
@@ -92,16 +109,19 @@ const WordSearchPage = () => {
         <SafeAreaView style={styles.container} >
             <TextInput style={[{  textAlign: checkArabic(kelime) === "tr" ? "left" : "right"} , styles.textInput] }
                 value={kelime}
-                onChangeText={(val) => {setKelime(val)
-                    getWordFromInput(val)}}>
+                onChangeText={(val) => {
+                    setKelime(val)
+                    debounce(function() {
+                        console.log('naber');
+                        getWordFromInput(val)
+                    }, 3000);
+                    }}>
                 </TextInput>
-                <View style={styles.row}>
             {/* <TouchableOpacity onPress={()=>{getWordFromInput(kelime);}}> 
             <View 
                 style={styles.button}
                 ><Text style={{color:"#fff"}}>Ara</Text></View>
             </TouchableOpacity> */}
-                </View>
             {renderResult()}
         </SafeAreaView>
     );
@@ -131,7 +151,7 @@ const styles = StyleSheet.create({
         padding:10,
         borderRadius:10,
         width:"90%",
-        // margin:30
+        margin:30,
     },
     button:{
         width:50,

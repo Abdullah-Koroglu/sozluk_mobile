@@ -1,32 +1,43 @@
-import React from 'react';
+import React , {useState} from 'react';
 import {TouchableOpacity, ImageBackground , StyleSheet, Text, View , TextInput, SafeAreaView } from 'react-native';
+import { useFonts } from 'expo-font';
+
 
 export default function Icon(props) {
-return(<SafeAreaView style={styles.container}>
-      {/* <ImageBackground  source={require("../../assets/images/drawerbg.jpg")} resizeMode="cover" style={[styles.image , styles.container]}> */}
-    <Text style={styles.text}>
-        header
+    const [loaded] = useFonts({
+        Montserrat: require('../../assets/fonts/Amiri-Regular.ttf'),
+      });
+      
+      if (!loaded) {
+        return null;
+      }
+return(<View style={[styles.container]}>
+    {/* <TouchableOpacity onPress={()=>{props.navigation.openDrawer()}}>
+        <Text style={[styles.text, { fontFamily : "Montserrat"}]}>toggle</Text>
+    </TouchableOpacity> */}
+    <Text style={[styles.text, { fontFamily : "Montserrat"}]}>
+    بسم الله
     </Text>
-    {/* </ImageBackground> */}
-</SafeAreaView>)
+    {/* <View style={{width:10 , height: 10}}></View> */}
+</View>)
 }
 
 const styles = StyleSheet.create({
     container:{
         flex:0,
+        flexDirection:"row",
         height:50,
-        // marginBottom:10,
-        shadowColor:"black",
         backgroundColor:"#056687",
         alignItems:"center",
-        justifyContent:"flex-end"
+        justifyContent:"space-around",
+        elevation:10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
     },
     text:{
-        paddingBottom:10
-
-    },
-    image:{
-        flex:1,
-        width : "100%"
-      }
+        color: "#fff",
+        fontSize:20
+    }
 });

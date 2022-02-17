@@ -15,7 +15,7 @@ export default function App(props) {
     <SafeAreaView style={{flex:1}}>
     <SettingsProvider>
       <NavigationContainer>
-      <Header></Header>
+      <Header {...props}/>
         <MyDrawer {...props} />
       </NavigationContainer>
     </SettingsProvider>
