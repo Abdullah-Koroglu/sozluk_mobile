@@ -1,38 +1,55 @@
 import React, { useState , useEffect } from 'react';
-import {TouchableOpacity, StyleSheet, Text, View , TextInput, SafeAreaView } from 'react-native';
+import {TouchableOpacity, StyleSheet, Text, View , TextInput, SafeAreaView, ScrollView } from 'react-native';
+// import { throttle } from 'lodash';
 
 import db from "../../assets/son.json";
 
 const WordSearchPage = () => {
     const [kelime, setKelime] = useState("")
-    const [translation, setTranslation] = useState("")
+    const [translation, setTranslation] = useState([])
     const [notFound, setNotFound] = useState("")
 
 
     const getWordFromInput = (input) => {
-        debugger
         var isArabic = /[\u0600-\u06FF\u0750-\u077F]/;
         let response = []
         if (isArabic.test(input) === true) {
-            response = db.filter(i=> i.ar == input );
-            // console.log(response);
+            response = db.filter(i=> normalize_text(i.ar).includes(normalize_text(input)) );
             if (response.length == 0) {
                     setTranslation([])
                     setNotFound("ar"); 
             }
             else {
                 setNotFound("");
-                setTranslation(response)
+                const list = response.map( i => i.ar);
+                const uniqueList = Array.from(new Set(list));
+                const groups= uniqueList.map( c => { 
+                            return  { word:c, goals:[]};
+                        } ); 
+                
+                response.forEach( d => { 
+                            groups.find( g => g.word == d.ar)?.goals.push(d.tr);
+                });
+                setTranslation(groups)
             }
         } else {
-            response = db.filter(i=> i.tr == input.toLocaleLowerCase('tr-TR') );
+            response = db.filter(i=> i.tr.includes(input.toLocaleLowerCase('tr-TR')) );
             if (response.length == 0) {
                     setTranslation([])
                     setNotFound("tr"); 
             }
             else {
                 setNotFound("");
-                setTranslation(response)
+                const list = response.map( i => i.tr);
+                const uniqueList = Array.from(new Set(list));
+                const groups= uniqueList.map( c => { 
+                            return  { word:c, goals:[]};
+                        } ); 
+                
+                response.forEach( d => { 
+                            groups.find( g => g.word == d.tr)?.goals.push(d.ar);
+                });
+                setTranslation(groups)
             }
         }
     }
@@ -66,28 +83,28 @@ const WordSearchPage = () => {
         return text;
     }
 
-    function debounce(func, wait, immediate) {
-        var timeout;
-        return function() {
-            var context = this, args = arguments;
-            var later = function() {
-                timeout = null;
-                if (!immediate) func.apply(context, args);
-            };
-            var callNow = immediate && !timeout;
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-            if (callNow) func.apply(context, args);
-        };
-    };
+    const RenderAWord = ({element}) =>{
+        return(
+            <View style={styles.aWordContiner}>
+
+            <Text style = {styles.aWordHeader}>
+                    { element.word }
+                </Text>
+                <Text>
+                { element.goals.join(', ') }
+                        </Text>
+            
+            </View>
+        )
+    }
 
     const renderResult = () => {
         return (
-            <View>
+            <ScrollView style={styles.listContainer} >
                 {
-                    translation.length > 0 &&
-                    translation.map((i, index) => {
-                        return (<Text key={index}> {i.ar} - {i.tr}</Text>)
+                    // translation.length > 0 &&
+                    translation?.map((i, index) => {
+                        return (<RenderAWord key={index} element={i}/>)
                     })
                     }
                 {
@@ -98,9 +115,8 @@ const WordSearchPage = () => {
                             <Text className="ws-header">
                                 لم يتم العثور على هذه الكلمة
                     </Text> : null 
-                    // <Text> {translation?.KelimeAr} - {translation?.KelimeTr} - {translation?.AnlamTr}</Text>
                 }
-            </View>
+            </ScrollView>
         )
     }
 
@@ -111,17 +127,9 @@ const WordSearchPage = () => {
                 value={kelime}
                 onChangeText={(val) => {
                     setKelime(val)
-                    debounce(function() {
-                        console.log('naber');
-                        getWordFromInput(val)
-                    }, 3000);
-                    }}>
+                    getWordFromInput(val)
+                }}>
                 </TextInput>
-            {/* <TouchableOpacity onPress={()=>{getWordFromInput(kelime);}}> 
-            <View 
-                style={styles.button}
-                ><Text style={{color:"#fff"}}>Ara</Text></View>
-            </TouchableOpacity> */}
             {renderResult()}
         </SafeAreaView>
     );
@@ -162,6 +170,25 @@ const styles = StyleSheet.create({
         backgroundColor:"blue",
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    aWordContiner:{
+        backgroundColor: '#2596be',
+        justifyContent: 'flex-start',
+        padding : 10,
+        margin: 5,
+        borderRadius : 5,
+        display:'flex',
+        alignItems : 'stretch',
+        // flexDirection : 'row',
+        // flex : 1
+    },
+    aWordHeader:{
+        fontSize: 35,
+        alignSelf : 'flex-start',
+        paddingHorizontal: 5
+    },
+    listContainer:{
+        alignSelf: 'stretch'
     }
   });
 
