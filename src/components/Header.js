@@ -1,9 +1,9 @@
-import React , {useState} from 'react';
-import {TouchableOpacity, ImageBackground , StyleSheet, Text, View , TextInput, SafeAreaView } from 'react-native';
+import React  from 'react';
+import {TouchableOpacity , StyleSheet, Text, View  } from 'react-native';
 import { useFonts } from 'expo-font';
 
 
-export default function Icon(props) {
+export default function Header(props) {
     const [loaded] = useFonts({
         Montserrat: require('../../assets/fonts/Amiri-Regular.ttf'),
       });
@@ -12,14 +12,17 @@ export default function Icon(props) {
         return null;
       }
 return(<View style={[styles.container]}>
-    {/* <TouchableOpacity onPress={()=>{props.navigation.openDrawer()}}>
-        <Text style={[styles.text, { fontFamily : "Montserrat"}]}>toggle</Text>
-    </TouchableOpacity> */}
+    <TouchableOpacity onPress={()=>{
+        console.log(props.navigation);
+        // props.navigation.openDrawer()
+        }}>
+        <Text style={[styles.text, { fontFamily : "Montserrat"}]}>وجد</Text>
+    </TouchableOpacity>
     <Text style={[styles.text, { fontFamily : "Montserrat"}]}>
     وَجَدْتُ    
     {/* وجدت */}
     </Text>
-    {/* <View style={{width:10 , height: 10}}></View> */}
+    <View style={{width:10 , height: 10}}></View>
 </View>)
 }
 

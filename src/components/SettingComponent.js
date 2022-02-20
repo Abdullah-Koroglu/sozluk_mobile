@@ -44,7 +44,9 @@ const SettingsComponent = ({
               style={{
                 paddingHorizontal: 20,
                 paddingBottom: 20,
-                paddingTop: 20,
+                paddingTop: 10,
+                borderColor: colors.grey,
+                borderBottomWidth: 1
               }}>
               <Text style={{fontSize: 17}}>{title}</Text>
               {subTitle && (
@@ -53,8 +55,6 @@ const SettingsComponent = ({
                 </Text>
               )}
             </View>
-
-            <View style={{height: 0.5, backgroundColor: colors.grey}} />
           </TouchableOpacity>
         ))}
       </ScrollView>

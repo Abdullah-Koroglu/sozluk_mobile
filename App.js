@@ -9,13 +9,21 @@ import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 const Drawer = createDrawerNavigator();
+import { useFonts } from 'expo-font';
 
 export default function App(props) {
+  const [loaded] = useFonts({
+    Montserrat: require('./assets/fonts/Amiri-Regular.ttf'),
+  });
+  
+  if (!loaded) {
+    return null;
+  }
   return (
     <SafeAreaView style={{flex:1}}>
     <SettingsProvider>
       <NavigationContainer>
-      <Header {...props}/>
+      {/* <Header {...props}/> */}
         <MyDrawer {...props} />
       </NavigationContainer>
     </SettingsProvider>
@@ -23,13 +31,39 @@ export default function App(props) {
   );
 }
 
+const LogoTitle = () =>{
+  return(
+    <View>
+      <Text style={{color : '#fff' , marginBottom: 5, fontSize:25 , fontFamily: 'Montserrat'}}>
+      وجد
+      </Text>
+    </View>
+  )
+} 
+
 function MyDrawer(props) {
   return (
     <Drawer.Navigator screenOptions={{
-      headerShown: false
+      headerShown: true
     }} drawerContent={props => <DrawerContent {...props} />}>
-      <Drawer.Screen name="Search" component={Search} />
-      <Drawer.Screen name="Settings" component={Settings} />
+      <Drawer.Screen name="Search" component={Search}         
+      options={{
+        headerTitle: (props) => <LogoTitle {...props} />,
+        headerStyle: {
+          backgroundColor: "#056687" 
+        },
+        headerTintColor: '#dbdbdb',
+        headerTitleAlign: 'center'
+      }} />
+      <Drawer.Screen name="Settings" component={Settings}         
+      options={{
+          headerTitle: (props) => <LogoTitle {...props} />,
+          headerStyle: {
+            backgroundColor: "#056687" 
+          },
+          headerTintColor: '#dbdbdb',
+          headerTitleAlign: 'center'
+        }}/>
       <Drawer.Screen name="Favorites" component={Favorites} />
     </Drawer.Navigator>
   );

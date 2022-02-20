@@ -4,7 +4,7 @@ import {TouchableOpacity, StyleSheet, Text, View , TextInput, SafeAreaView, Scro
 
 import db from "../../assets/son.json";
 
-const WordSearchPage = () => {
+const WordSearchPage = ({navigation}) => {
     const [kelime, setKelime] = useState("")
     const [translation, setTranslation] = useState([])
     const [notFound, setNotFound] = useState("")
@@ -110,15 +110,17 @@ const WordSearchPage = () => {
                         return (<RenderAWord key={index} element={i}/>)
                     })
                     }
-                {
+            <View style={{ alignItems: 'center', }}>
+            {
                     notFound === "tr" ?
                         <Text className="ws-header">
-                            Bu kelime bulunamadı
+                            Bu kelime bulunamadı.
                     </Text> : notFound === "ar" ?
                             <Text className="ws-header">
-                                لم يتم العثور على هذه الكلمة
+                                لم يتم العثور على هذه الكلمة.
                     </Text> : null 
                 }
+            </View>
             </ScrollView>
         )
     }
@@ -165,16 +167,6 @@ const styles = StyleSheet.create({
         width:"90%",
         margin:30,
     },
-    button:{
-        width:50,
-        height:30,
-        borderRadius:10,
-        margin:10,
-        textShadowColor:"red",
-        backgroundColor:"blue",
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
     aWordContiner:{
         backgroundColor: '#2596be',
         justifyContent: 'flex-start',
@@ -187,9 +179,10 @@ const styles = StyleSheet.create({
         // flex : 1
     },
     aWordHeader:{
-        fontSize: 35,
+        fontSize: 25,
         alignSelf : 'flex-start',
-        paddingHorizontal: 5
+        paddingHorizontal: 5,
+        textTransform: 'capitalize'
     },
     listContainer:{
         alignSelf: 'stretch'

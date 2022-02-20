@@ -75,7 +75,7 @@ export default function App(props) {
         </View>
       </DrawerContentScrollView>
       <View style={styles.bottomDrawerSection}>
-        <Text style={[styles.pagesText , {fontSize:49 , fontFamily : "Montserrat"}]}> اسم التطبيق </Text>
+        <Text style={[styles.pagesText , {fontSize:22 , fontFamily : "Montserrat"}]}> مَنْ طلَبَ شَیئاً وَ جَدَّ وَجَدَ.</Text>
     </View>
       </ImageBackground>
     </View>
