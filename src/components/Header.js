@@ -16,7 +16,8 @@ return(<View style={[styles.container]}>
         <Text style={[styles.text, { fontFamily : "Montserrat"}]}>toggle</Text>
     </TouchableOpacity> */}
     <Text style={[styles.text, { fontFamily : "Montserrat"}]}>
-    بسم الله
+    وَجَدْتُ    
+    {/* وجدت */}
     </Text>
     {/* <View style={{width:10 , height: 10}}></View> */}
 </View>)

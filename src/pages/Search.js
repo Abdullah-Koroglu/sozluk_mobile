@@ -11,9 +11,9 @@ const WordSearchPage = () => {
 
 
     const getWordFromInput = (input) => {
-        console.log('====================================');
-        console.log('naber');
-        console.log('====================================');
+        // console.log('====================================');
+        // console.log('naber');
+        // console.log('====================================');
         var isArabic = /[\u0600-\u06FF\u0750-\u077F]/;
         let response = []
         if (isArabic.test(input) === true) {
@@ -129,7 +129,7 @@ const WordSearchPage = () => {
             <TextInput style={[{  textAlign: checkArabic(kelime) === "tr" ? "left" : "right"} , styles.textInput] }
                 value={kelime}
                 onChangeText={(val) => {
-                    console.error('naber')
+                    // console.error('naber')
                     setKelime(val)
                     getWordFromInput(val)
                 }}>

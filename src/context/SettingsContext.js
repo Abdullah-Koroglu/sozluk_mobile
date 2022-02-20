@@ -1,7 +1,6 @@
 import createDataContext from './createDataContext'
 // import { AsyncStorage } from 'react-native';
 const settingReducer = (state,action) =>{
-    console.log("naber");
     switch (action.type) {
         case 'set_locale':
             // _storeLocale(action.payload)
@@ -45,5 +44,5 @@ const _retrieveLocale = async () => {
 export const { Provider , Context} = createDataContext(
     settingReducer,
     { setLocale },
-    { locale : "tr"}
+    { locale : "tr" , theme : 'p'}
 )

@@ -1,8 +1,12 @@
 {
   "locale": "tr",
+  "localeName": "Türkçe",
   "global": {
     "home": "Anasayfa",
     "settings": "Ayarlar",
+    "language": "Dil",
+    "theme": "Tema",
+    "on_premium": "Premium deneyin",
     "favs": "Favoriler"
   }
 }

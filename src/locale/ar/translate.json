@@ -1,8 +1,12 @@
 {
   "locale": "ar",
+  "localeName": "عربية",
   "global": {
     "home": "الصفحة الرئيسية",
     "settings": "إعدادات",
+    "language": "اللغة",
+    "theme": "السمة",
+    "on_premium": "جرب قسط",
     "favs": "المفضلة"
   }
 }
