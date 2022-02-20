@@ -1,6 +1,7 @@
-import React, { useState , useEffect } from 'react';
+import React, { useState , useEffect ,useCallback } from 'react';
 import {TouchableOpacity, StyleSheet, Text, View , TextInput, SafeAreaView, ScrollView } from 'react-native';
 // import { throttle } from 'lodash';
+import { debounce } from "lodash";
 
 import db from "../../assets/son.json";
 
@@ -9,15 +10,19 @@ const WordSearchPage = ({navigation}) => {
     const [translation, setTranslation] = useState([])
     const [notFound, setNotFound] = useState("")
 
+    const myChangeHandler = useCallback(debounce((e)=>{getWordFromInput(e);}, 500), []);
+
+
 
     const getWordFromInput = (input) => {
-        // console.log('====================================');
-        // console.log('naber');
-        // console.log('====================================');
+        setTranslation([])
+        console.log('====================================');
+        console.log(input);
+        console.log('====================================');
         var isArabic = /[\u0600-\u06FF\u0750-\u077F]/;
         let response = []
         if (isArabic.test(input) === true) {
-            response = db.filter(i=> normalize_text(i.ar) == normalize_text(input) );
+            response = input.length > 3  ? db.filter(i=> normalize_text(i.ar).includes(normalize_text(input)) ) : db.filter(i=> normalize_text(i.ar) == normalize_text(input) )
             if (response.length == 0) {
                     setTranslation([])
                     setNotFound("ar"); 
@@ -36,7 +41,8 @@ const WordSearchPage = ({navigation}) => {
                 setTranslation(groups)
             }
         } else {
-            response = db.filter(i=> i.tr  == input.toLocaleLowerCase('tr-TR'));
+            let newReg = input.length > 3 ? new RegExp(input.toLocaleLowerCase('tr-TR'), 'g'): new RegExp(`(?:^|\W)${input.toLocaleLowerCase('tr-TR')}(?:$|\W)`, 'g')
+            response = db.filter(i=> newReg.test(i.tr));
             if (response.length == 0) {
                     setTranslation([])
                     setNotFound("tr"); 
@@ -125,15 +131,27 @@ const WordSearchPage = ({navigation}) => {
         )
     }
 
+    function throttle(func, timeFrame) {
+        var lastTime = 0;
+        function func () {
+             console.log('asdf');
+            var now = new Date();
+            if (now - lastTime >= timeFrame) {
+                func();
+                lastTime = now;
+            }
+        };
+        return func
+      }
+
 
     return (
         <SafeAreaView style={styles.container} >
             <TextInput style={[{  textAlign: checkArabic(kelime) === "tr" ? "left" : "right"} , styles.textInput] }
                 value={kelime}
                 onChangeText={(val) => {
-                    // console.error('naber')
                     setKelime(val)
-                    getWordFromInput(val)
+                    myChangeHandler(val)
                 }}>
                 </TextInput>
             {renderResult()}
