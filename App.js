@@ -7,9 +7,11 @@ import Favorites from "./src/pages/Favorites";
 import { Provider as SettingsProvider } from './src/context/SettingsContext'
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer , useNavigation } from '@react-navigation/native';
 const Drawer = createDrawerNavigator();
 import { useFonts } from 'expo-font';
+import Icon from "./src/components/Icon";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function App(props) {
   const [loaded] = useFonts({
@@ -41,6 +43,21 @@ const LogoTitle = () =>{
   )
 } 
 
+const LeftButton = () =>{
+  const navigation = useNavigation();
+  return(
+    <TouchableOpacity
+      style={{marginHorizontal: 5}}
+    onPress={()=>{ navigation.toggleDrawer();}}>
+      <Icon
+          type="menu"
+          color={"white"}
+          size={"37"}
+        />
+    </TouchableOpacity>
+  )
+} 
+
 function MyDrawer(props) {
   return (
     <Drawer.Navigator screenOptions={{
@@ -48,7 +65,8 @@ function MyDrawer(props) {
     }} drawerContent={props => <DrawerContent {...props} />}>
       <Drawer.Screen name="Search" component={Search}         
       options={{
-        headerTitle: (props) => <LogoTitle {...props} />,
+        headerTitle: (props) => <LogoTitle/>,
+        headerLeft : () => <LeftButton/>,
         headerStyle: {
           backgroundColor: "#056687" 
         },
@@ -57,7 +75,8 @@ function MyDrawer(props) {
       }} />
       <Drawer.Screen name="Settings" component={Settings}         
       options={{
-          headerTitle: (props) => <LogoTitle {...props} />,
+          headerLeft : (props) => <LeftButton/>,
+          headerTitle: (props) => <LogoTitle/>,
           headerStyle: {
             backgroundColor: "#056687" 
           },

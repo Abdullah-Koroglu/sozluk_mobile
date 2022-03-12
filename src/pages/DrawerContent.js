@@ -28,8 +28,7 @@ export default function App(props) {
       <DrawerContentScrollView {...props}>
         <View style={styles.section}>
           <View style={styles.header}>
-            <Image source={require("../../assets/favicon.png")}></Image>
-            <Text style={[styles.title , { fontFamily : "Montserrat"}]}>قاموس</Text>
+            <Image source={require("../../assets/splash.png")} style={styles.CoverImage} resizeMode="cover"></Image>
           </View>
         </View>
         <View style={styles.drawerContent}>
@@ -149,5 +148,10 @@ const styles = StyleSheet.create({
   image:{
     flex:1,
     width : "100%"
+  },
+  CoverImage:{
+    flex:1,
+    width : "100%",
+    height : 120,
   }
 });

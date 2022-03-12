@@ -4,6 +4,7 @@ import {TouchableOpacity, StyleSheet, Text, View , TextInput, SafeAreaView, Scro
 import { debounce } from "lodash";
 
 import db from "../../assets/son.json";
+import Icon from '../components/Icon';
 
 const WordSearchPage = ({navigation}) => {
     const [kelime, setKelime] = useState("")
@@ -15,10 +16,9 @@ const WordSearchPage = ({navigation}) => {
 
 
     const getWordFromInput = (input) => {
+        if (input) {
+            
         setTranslation([])
-        console.log('====================================');
-        console.log(input);
-        console.log('====================================');
         var isArabic = /[\u0600-\u06FF\u0750-\u077F]/;
         let response = []
         if (isArabic.test(input) === true) {
@@ -61,6 +61,11 @@ const WordSearchPage = ({navigation}) => {
                 setTranslation(groups)
             }
         }
+    
+        }else{
+            setTranslation([])
+            setNotFound('')
+        }
     }
 
     const checkArabic = (input) => {
@@ -96,18 +101,26 @@ const WordSearchPage = ({navigation}) => {
         return(
             <View style={styles.aWordContiner}>
 
-            <Text style = {styles.aWordHeader}>
-                    { element.word }
+              <View style={{flex : 1, marginEnd : 10}}>
+              <Text style={styles.aWordHeader}>
+                    {element.word}
                 </Text>
                 <Text>
-                { element.goals.join(', ') }
-                        </Text>
-            
+                    {element.goals.join(', ')}
+                </Text>
+              </View>
+                <Icon
+                    type="star"
+                    color={'#d9d9d9'}
+                    // color={"#ffdf00"}
+                    size={"25"}
+                />
             </View>
         )
     }
 
     const renderResult = () => {
+        //TODO ARANAN KELME ILK GETIRILECEK
         return (
             <ScrollView style={styles.listContainer} >
                 {
@@ -130,20 +143,6 @@ const WordSearchPage = ({navigation}) => {
             </ScrollView>
         )
     }
-
-    function throttle(func, timeFrame) {
-        var lastTime = 0;
-        function func () {
-             console.log('asdf');
-            var now = new Date();
-            if (now - lastTime >= timeFrame) {
-                func();
-                lastTime = now;
-            }
-        };
-        return func
-      }
-
 
     return (
         <SafeAreaView style={styles.container} >
@@ -186,20 +185,24 @@ const styles = StyleSheet.create({
         margin:30,
     },
     aWordContiner:{
-        backgroundColor: '#2596be',
+        backgroundColor: '#f2f3f5',
         justifyContent: 'flex-start',
         padding : 10,
         margin: 5,
         borderRadius : 5,
         display:'flex',
         alignItems : 'stretch',
-        // flexDirection : 'row',
+        borderBottomWidth:1,
+        borderColor: '#dbdbdb',
+        flexDirection : 'row',
+        alignItems: 'center',
+        justifyContent: "space-between"
         // flex : 1
     },
     aWordHeader:{
         fontSize: 25,
         alignSelf : 'flex-start',
-        paddingHorizontal: 5,
+        // paddingHorizontal: 5,
         textTransform: 'capitalize'
     },
     listContainer:{
