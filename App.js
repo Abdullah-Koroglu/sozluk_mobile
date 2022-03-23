@@ -37,7 +37,7 @@ const LogoTitle = () =>{
   return(
     <View>
       <Text style={{color : '#fff' , marginBottom: 5, fontSize:25 , fontFamily: 'Montserrat'}}>
-      وجد
+      وجدت
       </Text>
     </View>
   )

@@ -1,7 +1,8 @@
 import React, { useState , useEffect ,useCallback } from 'react';
 import {TouchableOpacity, StyleSheet, Text, View , TextInput, SafeAreaView, ScrollView } from 'react-native';
-// import { throttle } from 'lodash';
 import { debounce } from "lodash";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 import db from "../../assets/son.json";
 import Icon from '../components/Icon';
@@ -38,7 +39,7 @@ const WordSearchPage = ({navigation}) => {
                 response.forEach( d => { 
                             groups.find( g => g.word == d.ar)?.goals.push(d.tr);
                 });
-                setTranslation(groups)
+                getWordToHeadAr(groups, input)
             }
         } else {
             let newReg = input.length > 3 ? new RegExp(input.toLocaleLowerCase('tr-TR'), 'g'): new RegExp(`(?:^|\W)${input.toLocaleLowerCase('tr-TR')}(?:$|\W)`, 'g')
@@ -58,7 +59,7 @@ const WordSearchPage = ({navigation}) => {
                 response.forEach( d => { 
                             groups.find( g => g.word == d.tr)?.goals.push(d.ar);
                 });
-                setTranslation(groups)
+                getWordToHeadTr(groups,input.toLocaleLowerCase('tr-TR'))
             }
         }
     
@@ -68,6 +69,18 @@ const WordSearchPage = ({navigation}) => {
         }
     }
 
+    const getWordToHeadTr = (list, word) =>{
+        let matches = list.filter(i => i.word.toLocaleLowerCase('tr-TR') === word)
+        let noMatches = list.filter(i => i.word.toLocaleLowerCase('tr-TR') !== word)
+        setTranslation([...matches, ...noMatches])
+    }
+    
+    const getWordToHeadAr = (list, word) =>{
+        let matches = list.filter(i=> normalize_text(i.ar) === normalize_text(input))
+        let noMatches = list.filter(i => i=> normalize_text(i.ar) !== normalize_text(input))
+        setTranslation([...matches, ...noMatches])
+    }
+
     const checkArabic = (input) => {
         var isArabic = /[\u0600-\u06FF\u0750-\u077F]/;
         if (isArabic.test(input) === true) {
@@ -75,6 +88,10 @@ const WordSearchPage = ({navigation}) => {
         } else {
             return "tr"
         }
+    }
+
+    const setFavorite = async (listItem) =>{
+        await AsyncStorage.setItem('@storage_Key', {...listItem, date: new Date()})
     }
 
     const normalize_text = function (text) {
@@ -105,7 +122,7 @@ const WordSearchPage = ({navigation}) => {
               <Text style={styles.aWordHeader}>
                     {element.word}
                 </Text>
-                <Text>
+                <Text style={styles.aWordGoal}>
                     {element.goals.join(', ')}
                 </Text>
               </View>
@@ -204,6 +221,9 @@ const styles = StyleSheet.create({
         alignSelf : 'flex-start',
         // paddingHorizontal: 5,
         textTransform: 'capitalize'
+    },
+    aWordGoal:{
+        fontSize:23
     },
     listContainer:{
         alignSelf: 'stretch'

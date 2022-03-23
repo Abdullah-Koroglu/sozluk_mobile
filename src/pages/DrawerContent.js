@@ -28,7 +28,7 @@ export default function App(props) {
       <DrawerContentScrollView {...props}>
         <View style={styles.section}>
           <View style={styles.header}>
-            <Image source={require("../../assets/splash.png")} style={styles.CoverImage} resizeMode="cover"></Image>
+            <Image source={require("../../assets/splash.png")} style={styles.CoverImage} tintColor='#fff' resizeMode="cover"></Image>
           </View>
         </View>
         <View style={styles.drawerContent}>
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   header: {
-    padding: 40,
+    paddingVertical: 40,
     alignContent:"center",
     justifyContent:"center",
     flexDirection:"row"
@@ -150,8 +150,9 @@ const styles = StyleSheet.create({
     width : "100%"
   },
   CoverImage:{
-    flex:1,
+    flex:0.85,
     width : "100%",
-    height : 120,
+    height :100,
+    marginBottom: -60
   }
 });
