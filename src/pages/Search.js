@@ -101,7 +101,6 @@ const WordSearchPage = ({navigation}) => {
         }
         const keys = await AsyncStorage.getAllKeys();
         setFavorites(keys)
-        console.log(keys);
     }
 
     const normalize_text = function (text) {

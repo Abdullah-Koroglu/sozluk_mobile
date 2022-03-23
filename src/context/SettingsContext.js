@@ -1,5 +1,4 @@
 import createDataContext from './createDataContext'
-// import { AsyncStorage } from 'react-native';
 const settingReducer = (state,action) =>{
     switch (action.type) {
         case 'set_locale':

@@ -1,10 +1,10 @@
-import React from 'react';
+import React , {useContext} from 'react';
 import Search from "./src/pages/Search";
-import Header from "./src/components/Header";
 import Settings from "./src/pages/Settings";
 import DrawerContent from "./src/pages/DrawerContent";
 import Favorites from "./src/pages/Favorites";
 import { Provider as SettingsProvider } from './src/context/SettingsContext'
+import { Context as SettingsContext } from "./src/context/SettingsContext";
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer , useNavigation } from '@react-navigation/native';
@@ -12,6 +12,11 @@ const Drawer = createDrawerNavigator();
 import { useFonts } from 'expo-font';
 import Icon from "./src/components/Icon";
 import { TouchableOpacity } from 'react-native-gesture-handler';
+
+const locales = {
+  tr: require("./src/locale/tr/translate.json"),
+  ar: require("./src/locale/ar/translate.json"),
+};
 
 export default function App(props) {
   const [loaded] = useFonts({
@@ -33,11 +38,11 @@ export default function App(props) {
   );
 }
 
-const LogoTitle = () =>{
+const LogoTitle = ({title}) =>{
   return(
     <View>
       <Text style={{color : '#fff' , marginBottom: 5, fontSize:25 , fontFamily: 'Montserrat'}}>
-      وجدت
+      {title ?? 'وجدت'}
       </Text>
     </View>
   )
@@ -59,6 +64,8 @@ const LeftButton = () =>{
 } 
 
 function MyDrawer(props) {
+  const { state : {locale}} = useContext(SettingsContext)
+
   return (
     <Drawer.Navigator screenOptions={{
       headerShown: true
@@ -76,14 +83,23 @@ function MyDrawer(props) {
       <Drawer.Screen name="Settings" component={Settings}         
       options={{
           headerLeft : (props) => <LeftButton/>,
-          headerTitle: (props) => <LogoTitle/>,
+          headerTitle: () => <LogoTitle title={locales[locale].global.settings}/>,
           headerStyle: {
             backgroundColor: "#056687" 
           },
           headerTintColor: '#dbdbdb',
           headerTitleAlign: 'center'
         }}/>
-      <Drawer.Screen name="Favorites" component={Favorites} />
+      <Drawer.Screen name="Favorites" component={Favorites}
+      options={{
+        headerLeft : (props) => <LeftButton/>,
+        headerTitle: () => <LogoTitle title={locales[locale].global.favs}/>,
+        headerStyle: {
+          backgroundColor: "#056687" 
+        },
+        headerTintColor: '#dbdbdb',
+        headerTitleAlign: 'center'
+      }} />
     </Drawer.Navigator>
   );
 }
