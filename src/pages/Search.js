@@ -11,14 +11,17 @@ const WordSearchPage = ({navigation}) => {
     const [kelime, setKelime] = useState("")
     const [translation, setTranslation] = useState([])
     const [notFound, setNotFound] = useState("")
+    const [favorites, setFavorites] = useState([])
 
     const myChangeHandler = useCallback(debounce((e)=>{getWordFromInput(e);}, 500), []);
 
 
 
-    const getWordFromInput = (input) => {
+    const getWordFromInput = async (input) => {
         if (input) {
-            
+        const keys = await AsyncStorage.getAllKeys();
+        console.log(keys);
+        setFavorites(keys)
         setTranslation([])
         var isArabic = /[\u0600-\u06FF\u0750-\u077F]/;
         let response = []
@@ -76,8 +79,8 @@ const WordSearchPage = ({navigation}) => {
     }
     
     const getWordToHeadAr = (list, word) =>{
-        let matches = list.filter(i=> normalize_text(i.ar) === normalize_text(input))
-        let noMatches = list.filter(i => i=> normalize_text(i.ar) !== normalize_text(input))
+        let matches = list.filter(i=> normalize_text(i.word) === normalize_text(word))
+        let noMatches = list.filter(i=> normalize_text(i.word) !== normalize_text(word))
         setTranslation([...matches, ...noMatches])
     }
 
@@ -91,7 +94,14 @@ const WordSearchPage = ({navigation}) => {
     }
 
     const setFavorite = async (listItem) =>{
-        await AsyncStorage.setItem('@storage_Key', {...listItem, date: new Date()})
+        if (favorites.includes(`@w_${listItem.word}`)) {
+            await AsyncStorage.removeItem(`@w_${listItem.word}`, console.log('removed'))
+        } else {
+            await AsyncStorage.setItem(`@w_${listItem.word}`, JSON.stringify({...listItem, date: new Date()}))
+        }
+        const keys = await AsyncStorage.getAllKeys();
+        setFavorites(keys)
+        console.log(keys);
     }
 
     const normalize_text = function (text) {
@@ -126,12 +136,15 @@ const WordSearchPage = ({navigation}) => {
                     {element.goals.join(', ')}
                 </Text>
               </View>
+              <TouchableOpacity onPress={()=>{
+                  setFavorite(element)
+              }}>
                 <Icon
                     type="star"
-                    color={'#d9d9d9'}
-                    // color={"#ffdf00"}
-                    size={"25"}
+                    color={favorites.includes(`@w_${element.word}`) ? "#ffdf00" :  '#d9d9d9'}
+                    size={"31"}
                 />
+                </TouchableOpacity>
             </View>
         )
     }
